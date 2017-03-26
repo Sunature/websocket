@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>jetty9 - zepto</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+  </head>
+  <script src="js/json2.js"></script>
+  <script src="js/zepto.min.js"></script>
+  <script src="js/sxws-1.2.0.js"></script>
+  <script>
+  	
+  	$.ws({
+  		url:"ws://localhost:8181/ws",
+  		uuid:"test123",
+  		timeout:3000, //default:6000
+  		//onmsg : "receivedNotice",
+  		onmsg: function(data){
+  			$("#dc").append("msg: "+data.msg+"<br>");
+  		},
+  		onback: function(data){
+  			//data.msgid ,data.time
+  			$("#dc").append("msgid: "+data.msgid+" -time: "+data.time+"<br>");
+  		},
+  		ontimeout: function(msgid){
+  			$("#dc").append("out: "+msgid+"<br>");
+  		}
+  		//ontimeout 不设置则不检测超时
+  	});
+  	
+  	//收到服务器消息
+  	function receivedNotice(data){
+  		//var m = eval("("+data+")");
+  		$("#dc").append(data+"<br>");
+  	}
+  	
+  	//发送消息 -> 服务器
+  	function send(msg){
+  		$.ws.send(msg,"asd123");
+  	}
+  	
+  </script>
+  <body>
+  
+  <input id="ipt"><button onclick="send(ipt.value);">send</button>
+  <div id="dc">
+  </div>
+  </body>
+</html>
